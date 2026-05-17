@@ -28,6 +28,14 @@
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+        /* Fullscreen responsive pulse */
+        .tab-click-hint {
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+        .tab-container-hover:hover .tab-click-hint {
+            opacity: 1;
+        }
     </style>
 </head>
 <body class="h-full bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-200 overflow-hidden">
@@ -152,6 +160,12 @@
                         </div>
                     </div>
 
+                    <!-- Reset to Song Default Speed -->
+                    <button id="resetScrollSpeedBtn" class="p-2.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-amber-400 rounded-xl transition-all hidden md:flex items-center space-x-1.5" title="Reset back to default calibrated speed for this song">
+                        <i class="ph ph-arrow-counter-clockwise"></i>
+                        <span class="text-xs font-bold">Sync Speed</span>
+                    </button>
+
                     <!-- Text Resizer -->
                     <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
                         <button id="fontSizeDown" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Make text smaller">
@@ -219,7 +233,12 @@
                     </div>
 
                     <!-- Main Tab Content Presentation Block -->
-                    <div class="relative bg-slate-900/30 border border-slate-800/60 rounded-2xl p-4 md:p-6 overflow-x-auto shadow-2xl">
+                    <div id="tabClickWrapper" onclick="enterStageFullscreen()" class="tab-container-hover group relative bg-slate-900/30 border border-slate-800/60 hover:border-indigo-500/40 rounded-2xl p-4 md:p-6 overflow-x-auto shadow-2xl cursor-zoom-in transition-all">
+                        <!-- Click Hint Banner -->
+                        <div class="tab-click-hint absolute top-3 right-3 flex items-center space-x-1.5 bg-indigo-600/90 text-white text-[10px] font-bold px-3 py-1.5 rounded-lg shadow-md pointer-events-none transition-all duration-200">
+                            <i class="ph ph-corners-out text-sm"></i>
+                            <span>Tap to Open Immersive Stage View</span>
+                        </div>
                         <pre id="tabText" class="text-indigo-300 whitespace-pre-wrap select-all focus:outline-none"></pre>
                     </div>
 
@@ -239,6 +258,77 @@
         </main>
     </div>
 
+    <!-- IMMERSIVE STAGE VIEW OVERLAY (ZOOMED & SIMPLIFIED) -->
+    <div id="stageFullscreenModal" class="hidden fixed inset-0 z-50 bg-black flex flex-col transition-all">
+        <!-- Sticky Header Controls HUD -->
+        <div class="p-4 bg-slate-950 border-b border-slate-900 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="p-2 bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 rounded-lg">
+                    <i class="ph ph-guitar text-lg"></i>
+                </div>
+                <div>
+                    <h3 id="fsSongTitle" class="text-md font-bold text-white leading-tight">Song Title</h3>
+                    <p id="fsSongArtist" class="text-xs text-slate-400">Artist</p>
+                </div>
+            </div>
+
+            <!-- Header Adjustments -->
+            <div class="flex items-center space-x-2.5">
+                <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
+                    <button id="fsFontSizeDown" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Zoom Text Out">
+                        <i class="ph ph-magnifying-glass-minus text-md"></i>
+                    </button>
+                    <span id="fsFontSizeDisplay" class="text-xs font-bold font-mono text-slate-300 w-11 text-center">22px</span>
+                    <button id="fsFontSizeUp" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Zoom Text In">
+                        <i class="ph ph-magnifying-glass-plus text-md"></i>
+                    </button>
+                </div>
+
+                <button onclick="exitStageFullscreen()" class="px-3 py-2 bg-rose-600 hover:bg-rose-500 text-white font-extrabold rounded-xl transition-all flex items-center space-x-1 shadow-lg shadow-rose-500/10" title="Exit Immersive Fullscreen Mode">
+                    <i class="ph ph-corners-in text-lg"></i>
+                    <span class="text-xs hidden sm:inline">Exit Fullscreen</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- High-contrast Zoomed Viewport -->
+        <div id="fsTabViewport" class="flex-1 overflow-y-auto px-6 md:px-16 py-8 md:py-12 no-scrollbar bg-slate-950 text-indigo-200">
+            <div class="max-w-5xl mx-auto">
+                <pre id="fsTabText" class="font-mono whitespace-pre-wrap select-all leading-relaxed tracking-wide focus:outline-none"></pre>
+            </div>
+        </div>
+
+        <!-- Floating Footer HUD -->
+        <div class="p-4 bg-slate-950 border-t border-slate-900 flex flex-wrap items-center justify-between gap-3">
+            <div class="flex items-center space-x-3">
+                <button id="fsAutoScrollToggle" class="px-5 py-2.5 bg-indigo-600 text-white font-bold rounded-xl hover:bg-indigo-500 transition-all flex items-center space-x-2" title="Enable scrolling without touching the screen">
+                    <i class="ph ph-arrows-down-up text-md"></i>
+                    <span id="fsAutoScrollText">Auto-Scroll</span>
+                </button>
+                
+                <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
+                    <button id="fsScrollSpeedDown" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded transition-all">
+                        <i class="ph ph-minus-circle text-lg"></i>
+                    </button>
+                    <span id="fsScrollSpeedDisplay" class="text-xs font-bold font-mono text-slate-300 w-10 text-center">1.50x</span>
+                    <button id="fsScrollSpeedUp" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded transition-all">
+                        <i class="ph ph-plus-circle text-lg"></i>
+                    </button>
+                </div>
+
+                <button id="fsResetSpeedBtn" class="p-2.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-amber-400 rounded-xl transition-all flex items-center space-x-1" title="Reset back to default calibrated speed for this song">
+                    <i class="ph ph-arrow-counter-clockwise"></i>
+                    <span class="text-xs font-bold hidden xs:inline">Reset Speed</span>
+                </button>
+            </div>
+
+            <div class="flex items-center space-x-2 text-[11px] text-slate-500 font-mono">
+                <i class="ph ph-info"></i>
+                <span>Tip: Use Arrow Keys or Swipe to nudge scrolling</span>
+            </div>
+        </div>
+    </div>
+
     <script>
         // Database of detailed standard bass tabs formatted beautifully for fast digital viewing.
         const songDatabase = [
@@ -251,6 +341,7 @@
                 tempo: 91,
                 difficulty: "Hard (Slap/Pop)",
                 accentColor: "indigo",
+                defaultScrollSpeed: 1.35, // Pre-calibrated speed matching the record tempo & tab line width
                 overview: "Key Scale: E minor / G major. Main slap riff relies on striking the root string with your thumb (Slap) and pulling the high octave strings (Pop).",
                 fretboardGuide: "G|-----------------------------------------------------------\nD|---------(9)---(9)-----------(9)---(9)----------(7)---(7)--\nA|---(7)-x-----x-----7-x--------------------(5)-x-----x-----\nE|-----------------------(8)-x-----x-----8------------------\n     [E Root - Slap/Pop]  [C Root - Slap/Pop]  [D Root - Slap/Pop]",
                 tab: `[INTRO - 0:00]
@@ -325,6 +416,7 @@ E|-5-5-5-5-5-5-5-5-------------------------------------------------|`
                 tempo: 108,
                 difficulty: "Easy",
                 accentColor: "indigo",
+                defaultScrollSpeed: 0.85, // Calibrated slow pace for steady 8th notes
                 overview: "Rely heavily on deep, warm root-note pulses (eighth notes) supporting the massive acoustic ballad rhythm.",
                 fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(3) [C String]---------(5) [D String]-------------\nE|-(0) [E String]-------(3) [G String]----------------------\n     Em Root             G Root              C/D Roots",
                 tab: `[INTRO - 0:00]
@@ -401,6 +493,7 @@ E|-----------------|-3-3-3-3-3-3-3-3-|-----------------|-0~~~~~~~~~~~~~~~|`
                 tempo: 151,
                 difficulty: "Hard (Solo section)",
                 accentColor: "indigo",
+                defaultScrollSpeed: 1.55, // Calibrated fast speed for intense second half & solo
                 overview: "Features one of the most famous bass solo breakdowns in rock history. Practice the slide up and precise walk in the legendary outro.",
                 fretboardGuide: "G|-----------------------------------------------------------\nD|-----------(0)-(2)-(3)-(2)-(0)-----------------------------\nA|--------(2)--------------------(3)-(2)-(0)---(2)-(3)-(0)---\nE|-(0)-(3)---------------------------------------------------\n   [McVie Outro Walkup - standard key setup]",
                 tab: `[INTRO & VERSE 1 - 0:00]
@@ -467,6 +560,7 @@ E|-0-0-0-0------------------|-0-0-0-0------------------|`
                 tempo: 88,
                 difficulty: "Medium (Syncopation)",
                 accentColor: "indigo",
+                defaultScrollSpeed: 1.15, // Smooth swing scroll pacing
                 overview: "A highly rhythmic, syncopated jazz-pop bassline. Follow the subtle hammer-ons and pull-offs to mimic the record's fluid bounce.",
                 fretboardGuide: "G|------------(5)-(5)---(7)p(5)------------------------------\nD|---------(5)-------(5)--------(7)--------------------------\nA|---(3)-(5)-------------------------(3)-(3)---(3)h(5)-(3)---\nE|-------------------------------------------(3)-------------\n     [Dm9 Chord Walk]                [Cmaj7/G Bounce]",
                 tab: `[INTRO - 0:00]
@@ -534,6 +628,7 @@ E|-----------------3-3-3-3-3-3-3-3-----|-3-3-3-3-----------------------------|`
                 tempo: 87,
                 difficulty: "Easy",
                 accentColor: "indigo",
+                defaultScrollSpeed: 0.95, // Calibrated slow pace matching 87 BPM driving pulse
                 overview: "Steady driving eighth notes supporting the epic wall of sound. Keep a firm, steady rhythm and match the drummer's bass drum.",
                 fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(9) [F#]----------------- (7) [E] ---------------\nE|-(7) [B] ------------------------------------------------\n     Verse Start                      Bridge Transition",
                 tab: `[INTRO - 0:00]
@@ -601,6 +696,7 @@ E|-----------------|-----------------|-7~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~|`
                 tempo: 94,
                 difficulty: "Easy",
                 accentColor: "indigo",
+                defaultScrollSpeed: 1.10, // Solid rock dynamic pace
                 overview: "The definition of standard heavy rock groove. Simple, powerful, and driven by E, A, and B notes with standard accents.",
                 fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(7) [E String]----------------------------------\nE|-(0) [E] ---------(5) [A] ---------(7) [B] ----------------\n     Main Groove Set",
                 tab: `[INTRO - 0:00]
@@ -657,6 +753,7 @@ E|-0-0-0-0-0-0-0-0-|-----------7-5-3-|-0-0-0-0-0-0-0-0-|-----------7-5-3-|`
                 tempo: 124,
                 difficulty: "Easy",
                 accentColor: "indigo",
+                defaultScrollSpeed: 0.75, // Slow long notes spacing scroll
                 overview: "Deep country folk rhythm using simple roots (C, D, Em). Lean into the slow momentum to maintain the atmospheric depth.",
                 fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|-(3) [C Root] ---------(5) [D Root] ---------(7) [E Root]-\nE|---------------------------------------------------------\n     Standard Chord progression roots for the entire song",
                 tab: `[INTRO - 0:00]
@@ -719,8 +816,10 @@ E|-----------------|-----------------|-----------------|`
         let isAutoScrolling = false;
         let scrollSpeed = 1.5; // pixel movement increment per animation loop frame
         let currentFontSize = 14; // baseline custom font size for JetBrains Mono
+        let fsFontSize = 22; // Stage View Immersive Zoom font size
         let scrollIntervalId = null;
         let audioCtx = null;
+        let isStageFullscreen = false;
         
         // Metronome state variables
         let isMetronomeRunning = false;
@@ -747,6 +846,18 @@ E|-----------------|-----------------|-----------------|`
         const scrollSpeedDisplay = document.getElementById("scrollSpeedDisplay");
         const sidebar = document.getElementById("sidebar");
         const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+        const resetScrollSpeedBtn = document.getElementById("resetScrollSpeedBtn");
+
+        // Stage Fullscreen Elements
+        const stageFullscreenModal = document.getElementById("stageFullscreenModal");
+        const fsSongTitle = document.getElementById("fsSongTitle");
+        const fsSongArtist = document.getElementById("fsSongArtist");
+        const fsTabText = document.getElementById("fsTabText");
+        const fsFontSizeDisplay = document.getElementById("fsFontSizeDisplay");
+        const fsAutoScrollToggle = document.getElementById("fsAutoScrollToggle");
+        const fsAutoScrollText = document.getElementById("fsAutoScrollText");
+        const fsScrollSpeedDisplay = document.getElementById("fsScrollSpeedDisplay");
+        const fsResetSpeedBtn = document.getElementById("fsResetSpeedBtn");
 
         // Build Song List in sidebar
         function initApp() {
@@ -781,7 +892,16 @@ E|-----------------|-----------------|-----------------|`
             // Set default display sizes
             fontSizeDisplay.textContent = `${currentFontSize}px`;
             tabText.style.fontSize = `${currentFontSize}px`;
-            scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(1)}x`;
+            scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+            
+            // Fullscreen controls binding
+            setupFullscreenControls();
+        }
+
+        // Synchronize and update all visual speed indicator displays
+        function updateSpeedDisplays() {
+            scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+            fsScrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
         }
 
         // Select song trigger
@@ -805,6 +925,10 @@ E|-----------------|-----------------|-----------------|`
             if (!song) return;
 
             selectedSong = song;
+
+            // Auto-calibrate the scroll speed immediately for hands-free playing
+            scrollSpeed = song.defaultScrollSpeed;
+            updateSpeedDisplays();
 
             // Update Details
             welcomeScreen.classList.add("hidden");
@@ -860,60 +984,190 @@ E|-----------------|-----------------|-----------------|`
         
         function scrollLoop() {
             if (!isAutoScrolling) return;
-            const viewport = document.getElementById("tabViewport");
-            viewport.scrollBy(0, scrollSpeed / 2); // Divide for highly smooth slow progression
+            
+            // Dynamically target either regular viewport or fullscreen viewport
+            const activeViewport = isStageFullscreen 
+                ? document.getElementById("fsTabViewport") 
+                : document.getElementById("tabViewport");
+
+            activeViewport.scrollBy(0, scrollSpeed / 2); // Divide for highly smooth slow progression
             
             // Check if user hit the bottom of viewport and pause
-            if ((viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight) <= 1) {
+            if ((activeViewport.scrollHeight - activeViewport.scrollTop - activeViewport.clientHeight) <= 1) {
                 isAutoScrolling = false;
+                syncAutoScrollUI();
+            } else {
+                requestAnimationFrame(scrollLoop);
+            }
+        }
+
+        // Synchronize auto scroll look & feel between the normal view and immersive stage view
+        function syncAutoScrollUI() {
+            if (isAutoScrolling) {
+                autoScrollToggle.classList.remove("bg-indigo-600");
+                autoScrollToggle.classList.add("bg-rose-600");
+                autoScrollText.textContent = "Pause Scroll";
+
+                fsAutoScrollToggle.classList.remove("bg-indigo-600");
+                fsAutoScrollToggle.classList.add("bg-rose-600");
+                fsAutoScrollText.textContent = "Pause Scroll";
+            } else {
                 autoScrollToggle.classList.remove("bg-rose-600");
                 autoScrollToggle.classList.add("bg-indigo-600");
                 autoScrollText.textContent = "Auto-Scroll";
-            } else {
-                requestAnimationFrame(scrollLoop);
+
+                fsAutoScrollToggle.classList.remove("bg-rose-600");
+                fsAutoScrollToggle.classList.add("bg-indigo-600");
+                fsAutoScrollText.textContent = "Auto-Scroll";
             }
         }
 
         function toggleAutoScroll() {
             if (!selectedSong) return;
             isAutoScrolling = !isAutoScrolling;
+            syncAutoScrollUI();
 
             if (isAutoScrolling) {
-                autoScrollToggle.classList.remove("bg-indigo-600");
-                autoScrollToggle.classList.add("bg-rose-600");
-                autoScrollText.textContent = "Pause Scroll";
                 requestAnimationFrame(scrollLoop);
-            } else {
-                autoScrollToggle.classList.remove("bg-rose-600");
-                autoScrollToggle.classList.add("bg-indigo-600");
-                autoScrollText.textContent = "Auto-Scroll";
             }
         }
 
         autoScrollToggle.onclick = toggleAutoScroll;
+        fsAutoScrollToggle.onclick = toggleAutoScroll;
 
-        document.getElementById("scrollSpeedUp").onclick = () => {
+        // Reset scroll speeds back to pre-calibrated song defaults
+        function resetToDefaultCalibratedSpeed() {
+            if (selectedSong) {
+                scrollSpeed = selectedSong.defaultScrollSpeed;
+                updateSpeedDisplays();
+            }
+        }
+
+        resetScrollSpeedBtn.onclick = resetToDefaultCalibratedSpeed;
+        fsResetSpeedBtn.onclick = resetToDefaultCalibratedSpeed;
+
+        // Incremental Speed Changes
+        function speedUp() {
             if (scrollSpeed < 5) {
-                scrollSpeed += 0.25;
-                scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+                scrollSpeed += 0.10;
+                updateSpeedDisplays();
             }
-        };
+        }
 
-        document.getElementById("scrollSpeedDown").onclick = () => {
-            if (scrollSpeed > 0.25) {
-                scrollSpeed -= 0.25;
-                scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+        function speedDown() {
+            if (scrollSpeed > 0.10) {
+                scrollSpeed -= 0.10;
+                updateSpeedDisplays();
             }
-        };
+        }
+
+        document.getElementById("scrollSpeedUp").onclick = speedUp;
+        document.getElementById("fsScrollSpeedUp").onclick = speedUp;
+        document.getElementById("scrollSpeedDown").onclick = speedDown;
+        document.getElementById("fsScrollSpeedDown").onclick = speedDown;
 
         function scrollToTop() {
-            document.getElementById("tabViewport").scrollTo({
+            const activeViewport = isStageFullscreen 
+                ? document.getElementById("fsTabViewport") 
+                : document.getElementById("tabViewport");
+
+            activeViewport.scrollTo({
                 top: 0,
                 behavior: 'smooth'
             });
         }
 
-        // Setup Web Audio Context for Metronome and Tuner references
+        // Stage Fullscreen Triggers
+        function enterStageFullscreen() {
+            if (!selectedSong) return;
+            isStageFullscreen = true;
+
+            // Fill elements
+            fsSongTitle.textContent = selectedSong.title;
+            fsSongArtist.textContent = selectedSong.artist;
+            fsTabText.textContent = selectedSong.tab;
+            
+            // Style matching
+            fsTabText.style.fontSize = `${fsFontSize}px`;
+            fsFontSizeDisplay.textContent = `Zoom: ${fsFontSize}px`;
+            
+            // Sync auto scroll button layout
+            syncAutoScrollUI();
+
+            // Calculate current scroll percentage to preserve the player's spot
+            const normalViewport = document.getElementById("tabViewport");
+            const fsViewport = document.getElementById("fsTabViewport");
+            const scrollPercent = normalViewport.scrollTop / (normalViewport.scrollHeight - normalViewport.clientHeight || 1);
+
+            // Open modal
+            stageFullscreenModal.classList.remove("hidden");
+
+            // Defer scroll matching slightly so browser computes dimensions
+            setTimeout(() => {
+                fsViewport.scrollTop = scrollPercent * (fsViewport.scrollHeight - fsViewport.clientHeight);
+                if (isAutoScrolling) {
+                    requestAnimationFrame(scrollLoop);
+                }
+            }, 50);
+        }
+
+        function exitStageFullscreen() {
+            isStageFullscreen = false;
+
+            // Calculate current scroll percentage in fullscreen view
+            const normalViewport = document.getElementById("tabViewport");
+            const fsViewport = document.getElementById("fsTabViewport");
+            const scrollPercent = fsViewport.scrollTop / (fsViewport.scrollHeight - fsViewport.clientHeight || 1);
+
+            // Hide modal
+            stageFullscreenModal.classList.add("hidden");
+
+            // Sync scroll back and resume looping if playing
+            normalViewport.scrollTop = scrollPercent * (normalViewport.scrollHeight - normalViewport.clientHeight);
+            syncAutoScrollUI();
+
+            if (isAutoScrolling) {
+                requestAnimationFrame(scrollLoop);
+            }
+        }
+
+        function setupFullscreenControls() {
+            const fsFontSizeUp = document.getElementById("fsFontSizeUp");
+            const fsFontSizeDown = document.getElementById("fsFontSizeDown");
+
+            fsFontSizeUp.onclick = () => {
+                if (fsFontSize < 42) {
+                    fsFontSize += 2;
+                    fsTabText.style.fontSize = `${fsFontSize}px`;
+                    fsFontSizeDisplay.textContent = `Zoom: ${fsFontSize}px`;
+                }
+            };
+
+            fsFontSizeDown.onclick = () => {
+                if (fsFontSize > 14) {
+                    fsFontSize -= 2;
+                    fsTabText.style.fontSize = `${fsFontSize}px`;
+                    fsFontSizeDisplay.textContent = `Zoom: ${fsFontSize}px`;
+                }
+            };
+
+            // Keyboard navigation helpers for Stage View (Space to play/pause, Arrows to nudge)
+            window.addEventListener("keydown", (e) => {
+                if (isStageFullscreen) {
+                    if (e.code === "Space") {
+                        e.preventDefault();
+                        toggleAutoScroll();
+                    } else if (e.code === "ArrowUp") {
+                        e.preventDefault();
+                        document.getElementById("fsTabViewport").scrollBy(0, -60);
+                    } else if (e.code === "ArrowDown") {
+                        e.preventDefault();
+                        document.getElementById("fsTabViewport").scrollBy(0, 60);
+                    }
+                }
+            });
+        }
+
         function initAudioContext() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
