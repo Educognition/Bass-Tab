@@ -1,0 +1,1144 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bass Tab Companion</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <!-- Phosphor Icons for high-quality music/UI indicators -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        pre {
+            font-family: 'JetBrains Mono', monospace;
+            line-height: 1.5;
+        }
+        /* Hide scrollbars but keep functionality for beautiful clean reading */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+<body class="h-full bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-200 overflow-hidden">
+
+    <div class="h-full flex flex-col md:flex-row">
+        
+        <!-- SIDEBAR: List of Songs & Tuning Tools -->
+        <aside id="sidebar" class="w-full md:w-80 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col h-auto md:h-full transition-all duration-300 z-30">
+            <!-- App Header -->
+            <div class="p-5 border-b border-slate-800 flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <div class="p-2.5 bg-indigo-600 rounded-xl shadow-lg shadow-indigo-500/20 flex items-center justify-center">
+                        <i class="ph ph-guitar text-xl text-white"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-lg font-bold tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent">Bass Companion</h1>
+                        <p class="text-xs text-slate-400 font-medium">Gig & iPad Live View</p>
+                    </div>
+                </div>
+                <!-- Light/Dark/Stage Toggle -->
+                <button id="themeToggle" class="p-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-all" title="Toggle theme">
+                    <i class="ph ph-moon text-lg" id="themeIcon"></i>
+                </button>
+            </div>
+
+            <!-- Song List Container (Scrollable) -->
+            <div class="flex-1 overflow-y-auto p-4 space-y-2 no-scrollbar">
+                <p class="text-[11px] font-bold text-slate-500 uppercase tracking-widest px-2 mb-2">My Setlist</p>
+                <div id="songList" class="space-y-1.5">
+                    <!-- Dynamic Song Buttons Generated via JS -->
+                </div>
+            </div>
+
+            <!-- QUICK ACCORDION FOOTER (Tuner & Metronome) -->
+            <div class="p-4 border-t border-slate-800 bg-slate-950/50 space-y-3">
+                
+                <!-- Bass Tuner -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2 text-slate-300">
+                            <i class="ph ph-activity text-indigo-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Quick E-A-D-G Tuner</span>
+                        </div>
+                        <label class="inline-flex items-center cursor-pointer" title="Switch to +1 Octave for small iPad speakers">
+                            <span class="text-[10px] text-slate-400 mr-2">Octave +1</span>
+                            <input type="checkbox" id="octaveToggle" class="sr-only peer">
+                            <div class="relative w-7 h-4 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-slate-300 after:border after:rounded-full after:h-3 after:w-3 after:transition-all peer-checked:bg-indigo-600"></div>
+                        </label>
+                    </div>
+                    <div class="grid grid-cols-4 gap-1.5">
+                        <button onclick="playPitch(41.20, 'E')" class="tuner-btn py-2 text-sm font-black bg-slate-800 hover:bg-indigo-600 hover:text-white rounded-lg transition-all border border-slate-700 text-slate-300">E</button>
+                        <button onclick="playPitch(55.00, 'A')" class="tuner-btn py-2 text-sm font-black bg-slate-800 hover:bg-indigo-600 hover:text-white rounded-lg transition-all border border-slate-700 text-slate-300">A</button>
+                        <button onclick="playPitch(73.42, 'D')" class="tuner-btn py-2 text-sm font-black bg-slate-800 hover:bg-indigo-600 hover:text-white rounded-lg transition-all border border-slate-700 text-slate-300">D</button>
+                        <button onclick="playPitch(98.00, 'G')" class="tuner-btn py-2 text-sm font-black bg-slate-800 hover:bg-indigo-600 hover:text-white rounded-lg transition-all border border-slate-700 text-slate-300">G</button>
+                    </div>
+                    <div id="tunerIndicator" class="text-center text-[10px] text-indigo-400 mt-2 font-mono h-3">Tap string note to sound</div>
+                </div>
+
+                <!-- Metronome -->
+                <div class="bg-slate-900/80 border border-slate-800 rounded-xl p-3.5 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center space-x-2 text-slate-300">
+                            <i class="ph ph-metronome text-rose-400"></i>
+                            <span class="text-xs font-bold uppercase tracking-wider">Metronome</span>
+                        </div>
+                        <span id="metroBPMDisplay" class="text-xs font-bold font-mono text-rose-400">120 BPM</span>
+                    </div>
+                    
+                    <div class="flex items-center space-x-3 mb-2">
+                        <input type="range" id="metroBPM" min="40" max="220" value="120" class="flex-1 accent-rose-500 h-1 bg-slate-700 rounded-lg appearance-none cursor-pointer">
+                        <button id="tapTempoBtn" class="px-2.5 py-1 text-[10px] font-bold bg-slate-800 hover:bg-slate-700 rounded-md border border-slate-700 text-slate-300 active:scale-95 transition-all">TAP</button>
+                    </div>
+
+                    <div class="flex items-center space-x-2">
+                        <button id="metroToggle" class="flex-1 py-1.5 text-xs font-bold bg-rose-600/20 hover:bg-rose-600/30 text-rose-400 border border-rose-500/30 rounded-lg transition-all flex items-center justify-center space-x-1">
+                            <i class="ph ph-play-pause"></i>
+                            <span>Start Click</span>
+                        </button>
+                        <div class="flex space-x-1.5 items-center justify-center px-1">
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-800 transition-colors duration-75" id="beatIndicator0"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-800 transition-colors duration-75" id="beatIndicator1"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-800 transition-colors duration-75" id="beatIndicator2"></div>
+                            <div class="w-2.5 h-2.5 rounded-full bg-slate-800 transition-colors duration-75" id="beatIndicator3"></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </aside>
+
+        <!-- MAIN DISPLAY PANEL -->
+        <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-950">
+            <!-- Top Controls Header -->
+            <div class="p-4 bg-slate-900/60 backdrop-blur-md border-b border-slate-800 flex flex-wrap items-center justify-between gap-3 z-20">
+                <div class="flex items-center space-x-3">
+                    <button id="mobileMenuBtn" class="md:hidden p-2 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg transition-all">
+                        <i class="ph ph-list text-xl"></i>
+                    </button>
+                    <div>
+                        <h2 id="currentSongTitle" class="text-lg md:text-xl font-extrabold text-white tracking-tight">Select a Song</h2>
+                        <p id="currentSongArtist" class="text-xs text-slate-400 font-medium">Select a song from the list to begin playing.</p>
+                    </div>
+                </div>
+
+                <!-- Hands-Free Playing Controls -->
+                <div class="flex items-center flex-wrap gap-2.5">
+                    
+                    <!-- Auto Scroll Control Group -->
+                    <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
+                        <button id="autoScrollToggle" class="px-3.5 py-1.5 text-xs font-bold bg-indigo-600 text-white rounded-lg hover:bg-indigo-500 transition-all flex items-center space-x-1" title="Enable scrolling without touching the screen">
+                            <i class="ph ph-arrows-down-up"></i>
+                            <span id="autoScrollText">Auto-Scroll</span>
+                        </button>
+                        <div class="flex items-center px-2 space-x-1">
+                            <button id="scrollSpeedDown" class="p-1 hover:bg-slate-800 text-slate-400 hover:text-white rounded transition-all">
+                                <i class="ph ph-minus-circle text-lg"></i>
+                            </button>
+                            <span id="scrollSpeedDisplay" class="text-xs font-bold font-mono text-slate-300 w-8 text-center" title="Adjust the pace of the scrolling">1.5x</span>
+                            <button id="scrollSpeedUp" class="p-1 hover:bg-slate-800 text-slate-400 hover:text-white rounded transition-all">
+                                <i class="ph ph-plus-circle text-lg"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Text Resizer -->
+                    <div class="flex items-center bg-slate-900 border border-slate-800 rounded-xl p-1 shadow-sm">
+                        <button id="fontSizeDown" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Make text smaller">
+                            <i class="ph ph-text-aa text-sm"></i>
+                        </button>
+                        <span id="fontSizeDisplay" class="text-xs font-bold font-mono text-slate-300 w-9 text-center">14px</span>
+                        <button id="fontSizeUp" class="p-1.5 hover:bg-slate-800 text-slate-400 hover:text-white rounded-lg transition-all" title="Make text larger">
+                            <i class="ph ph-text-aa text-lg"></i>
+                        </button>
+                    </div>
+
+                    <!-- Quick Scroll back to Top -->
+                    <button onclick="scrollToTop()" class="p-2.5 bg-slate-900 border border-slate-800 hover:bg-slate-800 text-slate-300 rounded-xl transition-all" title="Instantly bounce back to the start">
+                        <i class="ph ph-caret-double-up text-lg"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Tab & Content Viewer -->
+            <div id="tabViewport" class="flex-1 overflow-y-auto p-6 md:p-8 space-y-8 no-scrollbar relative">
+                <!-- Start Instruction Placeholder -->
+                <div id="welcomeScreen" class="h-full flex flex-col items-center justify-center text-center max-w-md mx-auto space-y-5">
+                    <div class="w-20 h-20 bg-indigo-600/10 border border-indigo-500/20 text-indigo-400 rounded-2xl flex items-center justify-center animate-bounce">
+                        <i class="ph ph-music-notes text-4xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Let's Jam!</h3>
+                        <p class="text-sm text-slate-400 mt-2">Pick any of the 7 classic songs from the side menu. Everything is pre-formatted to read like an absolute pro on any iPad or tablet screen.</p>
+                    </div>
+                </div>
+
+                <!-- Tab Display Box -->
+                <div id="tabContentContainer" class="hidden max-w-4xl mx-auto space-y-6">
+                    <!-- Quick Specs Bar -->
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        <div class="bg-slate-900/50 border border-slate-800/80 p-3.5 rounded-xl">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Tuning</div>
+                            <div class="text-sm font-extrabold text-white flex items-center space-x-1.5">
+                                <span id="specTuning">Standard (E A D G)</span>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/50 border border-slate-800/80 p-3.5 rounded-xl">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Key</div>
+                            <div class="text-sm font-extrabold text-white" id="specKey">G Major</div>
+                        </div>
+                        <div class="bg-slate-900/50 border border-slate-800/80 p-3.5 rounded-xl">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Original Tempo</div>
+                            <div class="text-sm font-extrabold text-white flex items-center space-x-1.5">
+                                <span id="specTempo">114 BPM</span>
+                                <button onclick="syncMetronome()" class="p-1 bg-slate-800 hover:bg-slate-700 rounded text-indigo-400 hover:text-indigo-300 text-[10px]" title="Sync Metronome with this BPM">Sync</button>
+                            </div>
+                        </div>
+                        <div class="bg-slate-900/50 border border-slate-800/80 p-3.5 rounded-xl">
+                            <div class="text-[10px] text-slate-400 uppercase font-bold tracking-wider mb-1">Difficulty</div>
+                            <div class="text-sm font-extrabold" id="specDifficulty">Medium</div>
+                        </div>
+                    </div>
+
+                    <!-- Fretboard Quick Guide Map -->
+                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-xl p-4">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2.5">Quick Hand Placement Map</h4>
+                        <div id="fingerboardGuide" class="overflow-x-auto no-scrollbar font-mono text-[11px] bg-slate-950 p-3 rounded-lg border border-slate-800 text-slate-300 leading-tight">
+                            <!-- Populated with key markers -->
+                        </div>
+                    </div>
+
+                    <!-- Main Tab Content Presentation Block -->
+                    <div class="relative bg-slate-900/30 border border-slate-800/60 rounded-2xl p-4 md:p-6 overflow-x-auto shadow-2xl">
+                        <pre id="tabText" class="text-indigo-300 whitespace-pre-wrap select-all focus:outline-none"></pre>
+                    </div>
+
+                    <!-- Performance Notes Pad -->
+                    <div class="bg-slate-900/50 border border-slate-800/80 rounded-2xl p-5 space-y-3">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center space-x-2">
+                                <i class="ph ph-notepad text-lg text-indigo-400"></i>
+                                <h4 class="text-sm font-bold text-white uppercase tracking-wider">My Custom Gig Notes (Auto-Saves)</h4>
+                            </div>
+                            <span class="text-[10px] text-slate-500">Saves to local browser storage</span>
+                        </div>
+                        <textarea id="performanceNotes" rows="3" placeholder="Add specific cues, pedal changes, or variations you want to remember..." class="w-full bg-slate-950/70 text-slate-200 border border-slate-800 rounded-xl p-3.5 text-xs focus:ring-1 focus:ring-indigo-500 focus:outline-none placeholder-slate-600 transition-all"></textarea>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // Database of detailed standard bass tabs formatted beautifully for fast digital viewing.
+        const songDatabase = [
+            {
+                id: "cant_stop",
+                title: "Can't Stop",
+                artist: "Red Hot Chili Peppers",
+                tuning: "Standard (E A D G)",
+                key: "E Minor",
+                tempo: 91,
+                difficulty: "Hard (Slap/Pop)",
+                accentColor: "indigo",
+                overview: "Key Scale: E minor / G major. Main slap riff relies on striking the root string with your thumb (Slap) and pulling the high octave strings (Pop).",
+                fretboardGuide: "G|-----------------------------------------------------------\nD|---------(9)---(9)-----------(9)---(9)----------(7)---(7)--\nA|---(7)-x-----x-----7-x--------------------(5)-x-----x-----\nE|-----------------------(8)-x-----x-----8------------------\n     [E Root - Slap/Pop]  [C Root - Slap/Pop]  [D Root - Slap/Pop]",
+                tab: `[INTRO - 0:00]
+No Bass for first 4 bars (Guitar Intro)
+Bass enters at 0:10 with crescendo building on E:
+
+G|--------------------------------------------------|
+D|--------------------------------------------------|
+A|-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7--|
+E|--------------------------------------------------|
+
+[MAIN SLAP RIFF - VERSE - 0:17]
+(S = Slap, P = Pop, x = Dead Note)
+
+  [Part 1: Over E]
+     S S P P S S P P S S P S
+G|-------9---9p7---------9-----9p7--------|
+D|-------------------7-7---7h9-----9p7----|
+A|-7-7-x---x-----7-x-------------------9--|
+E|----------------------------------------|
+
+  [Part 2: Over C]
+     S S P P S S P P S S P S
+G|-------9---9p7---------9-----9p7--------|
+D|-------------------7-7---7h9-----9p7----|
+A|-------------------------------------9--|
+E|-8-8-x---x-----8-x----------------------|
+
+  [Part 3: Over D]
+     S S P P S S P P S S P S
+G|-------7---7p5---------7-----7p5--------|
+D|-------------------5-5---5h7-----7p5----|
+A|-5-5-x---x-----5-x-------------------7--|
+E|----------------------------------------|
+
+  [Part 4: Over B]
+     S S P P S S P P S S P S
+G|----------------------------------------|
+D|-------9---9p7---------9-----9p7--------|
+A|-------------------7-7---7h9-----9p7----|
+E|-7-7-x---x-----7-x-------------------9--|
+
+
+[CHORUS - 0:49]
+"The world I love, the tears I drop..." (Smooth, picked or fingered style)
+
+G|-----------------------------------------------------------------|
+D|-----------------------------------------------------------------|
+A|-----------------5-5-5-5-5-5-5-5-0-0-0-0-0-0-0-0-3-3-3-3-3-3-3-3-|
+E|-3-3-3-3-3-3-3-3-------------------------------------------------|
+
+G|-----------------------------------------------------------------|
+D|-----------------------------------------------------------------|
+A|-----------------5-5-5-5-5-5-5-5-0-0-0-0-0-0-0-0-3-3-3-3-3-3-x-x-|
+E|-3-3-3-3-3-3-3-3-------------------------------------------------|
+
+
+[BRIDGE - 2:05]
+"Wait a minute I'm passing out..."
+
+G|-----------------------------------------------------------------|
+D|-----------------------------------------------------------------|
+A|-----------------5-5-5-5-5-5-5-5-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-7-|
+E|-5-5-5-5-5-5-5-5-------------------------------------------------|`
+            },
+            {
+                id: "carry_you_home",
+                title: "Carry You Home",
+                artist: "Alex Warren & Ella Henderson",
+                tuning: "Standard (E A D G)",
+                key: "E Minor",
+                tempo: 108,
+                difficulty: "Easy",
+                accentColor: "indigo",
+                overview: "Rely heavily on deep, warm root-note pulses (eighth notes) supporting the massive acoustic ballad rhythm.",
+                fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(3) [C String]---------(5) [D String]-------------\nE|-(0) [E String]-------(3) [G String]----------------------\n     Em Root             G Root              C/D Roots",
+                tab: `[INTRO - 0:00]
+No Bass (Acoustic guitar and vocal)
+
+
+[VERSE 1 - 0:13]
+"We were talking to the sunset..."
+(Warm whole notes on each chord change)
+
+   Em                C                 G                 G
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-3~~~~~~~~~~~~~~~|-----------------|-----------------|
+E|-0~~~~~~~~~~~~~~~|-----------------|-3~~~~~~~~~~~~~~~|-3~~~~~~~~~~~~~~~|
+
+   Em                C                 G                 D
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-3~~~~~~~~~~~~~~~|-----------------|-5~~~~~~~~~~~~~~~|
+E|-0~~~~~~~~~~~~~~~|-----------------|-3~~~~~~~~~~~~~~~|-----------------|
+
+
+[PRE-CHORUS - 0:31]
+"These days, these nights are changing..."
+
+   Em                C                 G                 Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-3-3-3-3-3-3-3-3-|-----------------|-----------------|
+E|-0-0-0-0-0-0-0-0-|-----------------|-3-3-3-3-3-3-3-3-|-0-0-0-0-0-0-0-0-|
+
+   C                 G                 D                 D
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3-3-3-3-3-3-3-3-|-----------------|-5-5-5-5-5-5-5-5-|-5-5-5-5-5-5-5-5-|
+E|-----------------|-3-3-3-3-3-3-3-3-|-----------------|-----------------|
+
+
+[CHORUS - 0:48]
+"Oh, I hope you know, I will carry you home..."
+(Driving 8th notes, solid heartbeat feel)
+
+   Em                G                 C                 G
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-----------------|-3-3-3-3-3-3-3-3-|-----------------|
+E|-0-0-0-0-0-0-0-0-|-3-3-3-3-3-3-3-3-|-----------------|-3-3-3-3-3-3-3-3-|
+
+   C                 G                 D                 D
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3-3-3-3-3-3-3-3-|-----------------|-5-5-5-5-5-5-5-5-|-5-5-5-5-5-5-5-5-|
+E|-----------------|-3-3-3-3-3-3-3-3-|-----------------|-----------------|
+
+   Em                G                 C                 G
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-----------------|-3-3-3-3-3-3-3-3-|-----------------|
+E|-0-0-0-0-0-0-0-0-|-3-3-3-3-3-3-3-3-|-----------------|-3-3-3-3-3-3-3-3-|
+
+   C                 G                 D                 Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3-3-3-3-3-3-3-3-|-----------------|-5-5-5-5-5-5-5-5-|-----------------|
+E|-----------------|-3-3-3-3-3-3-3-3-|-----------------|-0~~~~~~~~~~~~~~~|`
+            },
+            {
+                id: "the_chain",
+                title: "The Chain",
+                artist: "Fleetwood Mac",
+                tuning: "Standard (E A D G)",
+                key: "A Minor / E Minor",
+                tempo: 151,
+                difficulty: "Hard (Solo section)",
+                accentColor: "indigo",
+                overview: "Features one of the most famous bass solo breakdowns in rock history. Practice the slide up and precise walk in the legendary outro.",
+                fretboardGuide: "G|-----------------------------------------------------------\nD|-----------(0)-(2)-(3)-(2)-(0)-----------------------------\nA|--------(2)--------------------(3)-(2)-(0)---(2)-(3)-(0)---\nE|-(0)-(3)---------------------------------------------------\n   [McVie Outro Walkup - standard key setup]",
+                tab: `[INTRO & VERSE 1 - 0:00]
+No Bass during first verse.
+"Listen to the wind blow..."
+
+
+[CHORUS 1 - 0:48]
+"And if you don't love me now..."
+
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|---------------------------------|-3-3-3-3-3-3-3-3-|-5-5-5-5-5-5-5-5|
+E|-5-5-5-5-5-5-5-5-|-5-5-5-5-5-5-5-5-|-----------------|---------------|
+
+G|---------------------------------|
+D|---------------------------------|
+A|---------------------------------|
+E|-0-0-0-0-0-0-0-0-|-0-0-0-0-0-0-0-0-|
+
+
+[VERSE 2 - 1:15]
+Fingered, playing off the steady rhythm kick.
+
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-7-7-7-7-7-7-5-5-|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-5-5-|-7-7-7-7-7-7-7-7-|
+E|-----------------|-----------------|-----------------|-----------------|
+
+
+[OUTRO BREAKDOWN - 2:40]
+Bass Solo - play this with pure, clean authority:
+
+G|--------------------------|--------------------------|
+D|--------------------------|--------------------------|
+A|--------2-3-5---5-5-3-2-0-|--------2-3-0---0-0-0-0---|
+E|-0------------------------|-0------------------------|
+
+G|--------------------------|--------------------------|
+D|--------------------------|--------------------------|
+A|--------2-3-5---5-5-3-2-0-|--------2-3-0---0-0-0-0---|
+E|-0------------------------|-0------------------------|
+
+
+[OUTRO HEAVY ROCK RIFF - 3:03]
+"Chain, keep us together..."
+
+G|--------------------------|--------------------------|
+D|----------3-2-0-----------|----------3-2-0-----------|
+A|-0-0-0-0--------3-2-0-----|-0-0-0-0--------3-2-0-----|
+E|--------------------------|--------------------------|
+
+G|--------------------------|--------------------------|
+D|----------3-2-0-----------|----------3-2-0-----------|
+A|----------------3-2-0-----|----------------3-2-0-----|
+E|-0-0-0-0------------------|-0-0-0-0------------------|`
+            },
+            {
+                id: "sunday_morning",
+                title: "Sunday Morning",
+                artist: "Maroon 5",
+                tuning: "Standard (E A D G)",
+                key: "C Major",
+                tempo: 88,
+                difficulty: "Medium (Syncopation)",
+                accentColor: "indigo",
+                overview: "A highly rhythmic, syncopated jazz-pop bassline. Follow the subtle hammer-ons and pull-offs to mimic the record's fluid bounce.",
+                fretboardGuide: "G|------------(5)-(5)---(7)p(5)------------------------------\nD|---------(5)-------(5)--------(7)--------------------------\nA|---(3)-(5)-------------------------(3)-(3)---(3)h(5)-(3)---\nE|-------------------------------------------(3)-------------\n     [Dm9 Chord Walk]                [Cmaj7/G Bounce]",
+                tab: `[INTRO - 0:00]
+Beautiful electric Rhodes intro. Bass drops in at 0:11 with the classic loop:
+
+G|----------------------------------------|
+D|---------5-5---7p5----------------------|
+A|-3/5-5-5-----5-----7--3-3-3-2-0---------|
+E|--------------------------------3-3-3---|
+
+G|----------------------------------------|
+D|---------5-5---7p5----------------------|
+A|-3/5-5-5-----5-----7--3-3-3-2-0---------|
+E|--------------------------------3-3-3---|
+
+
+[VERSE 1 - 0:22]
+"Sunday morning rain is falling..."
+(Keep it swinging and smooth)
+
+G|----------------------------------------|
+D|---------5-5---7p5----------------------|
+A|-3/5-5-5-----5-----7--3-3-3-2-0---------|
+E|--------------------------------3-3-3---|
+
+G|----------------------------------------|
+D|---------5-5---7p5----------------------|
+A|-3/5-5-5-----5-----7--3-3-3-2-0---------|
+E|--------------------------------3-3-3---|
+
+
+[CHORUS - 1:04]
+"But I'm not... back there... "
+
+G|--------------------|-------------------|-------------------|-------------------|
+D|---------5--7-5-----|-------------------|-------------------|-------------------|
+A|-5-5-5-5--------7-5-|-3-3-3-3-2-0-------|-------------------|-------------------|
+E|--------------------|-------------3-3-3-|-1-1-1-1-1-1-1-1-3-|-3-3-3-3-3-3-3-3---|
+
+G|--------------------|-------------------|-------------------|-------------------|
+D|---------5--7-5-----|-------------------|-------------------|-------------------|
+A|-5-5-5-5--------7-5-|-3-3-3-3-2-0-------|-------------------|-------------------|
+E|--------------------|-------------3-3-3-|-1-1-1-1-1-1-1-1-3-|-3-3-3-3-3-3-3-3-x-|
+
+
+[BRIDGE / BREAK - 2:09]
+"And things may bring us back to..."
+
+G|-------------------------------------|-------------------------------------|
+D|-------------------------------------|-------------------------------------|
+A|---------2-3-4-5-5-5-5-5-5-5-5-5-----|---------2-3-4-5-5-5-5-5-5-5-5-5-----|
+E|-1-1-1-1-----------------------------|-1-1-1-1-----------------------------|
+
+G|-------------------------------------|-------------------------------------|
+D|-------------------------------------|---------5-5-5-5-5-5-5-5-------------|
+A|-3-3-3-3-3-3-3-3---------------------|-------------------------------------|
+E|-----------------3-3-3-3-3-3-3-3-----|-3-3-3-3-----------------------------|`
+            },
+            {
+                id: "yellow",
+                title: "Yellow",
+                artist: "Coldplay",
+                tuning: "Standard (E A D G)",
+                key: "B Major",
+                tempo: 87,
+                difficulty: "Easy",
+                accentColor: "indigo",
+                overview: "Steady driving eighth notes supporting the epic wall of sound. Keep a firm, steady rhythm and match the drummer's bass drum.",
+                fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(9) [F#]----------------- (7) [E] ---------------\nE|-(7) [B] ------------------------------------------------\n     Verse Start                      Bridge Transition",
+                tab: `[INTRO - 0:00]
+Wait for the acoustic intro, bass enters with heavy distorted rhythm:
+
+   B (7th Fret E String)             F# (9th Fret A String)
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|---------------------------------|-9-9-9-9-9-9-9-9-|-9-9-9-9-9-9-9-9|
+E|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-----------------|---------------|
+
+   E (7th Fret A String)             B
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-----------------|---------------|
+E|-----------------|-----------------|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7|
+
+
+[VERSE 1 - 0:22]
+"Look at the stars, look how they shine for you..."
+
+   B                                 F#
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|---------------------------------|-9-9-9-9-9-9-9-9-|-9-9-9-9-9-9-9-9|
+E|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-----------------|---------------|
+
+   E                                 B
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-----------------|---------------|
+E|-----------------|-----------------|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7|
+
+
+[CHORUS - 1:05]
+"Your skin, oh yeah your skin and bones..."
+
+   E                                 G#m
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7-|-----------------|---------------|
+E|-----------------|-----------------|-4-4-4-4-4-4-4-4-|-4-4-4-4-4-4-4-4|
+
+   F#                                E
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-9-9-9-9-9-9-9-9-|-9-9-9-9-9-9-9-9-|-7-7-7-7-7-7-7-7-|-7-7-7-7-7-7-7-7|
+E|-----------------|-----------------|-----------------|---------------|
+
+
+[BRIDGE / OUTRO - 3:12]
+"It's true, look how they shine for you..."
+
+G|---------------------------------|---------------------------------|
+D|---------------------------------|---------------------------------|
+A|-7-7-7-7-7-7-7-7-|-9-9-9-9-9-9-9-9-|-----------------|---------------|
+E|-----------------|-----------------|-7~~~~~~~~~~~~~~~|~~~~~~~~~~~~~~~|`
+            },
+            {
+                id: "i_love_rock_n_roll",
+                title: "I Love Rock 'n' Roll",
+                artist: "Joan Jett & The Blackhearts",
+                tuning: "Standard (E A D G)",
+                key: "E Minor",
+                tempo: 94,
+                difficulty: "Easy",
+                accentColor: "indigo",
+                overview: "The definition of standard heavy rock groove. Simple, powerful, and driven by E, A, and B notes with standard accents.",
+                fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|---------(7) [E String]----------------------------------\nE|-(0) [E] ---------(5) [A] ---------(7) [B] ----------------\n     Main Groove Set",
+                tab: `[INTRO - 0:00]
+Starts with drums, bass hits hard on 0:04:
+
+G|-----------------|-----------------|
+D|-----------------|-----------------|
+A|-----7-7-----7-7-|-----------------|
+E|-0-0-----0-0-----|-5-5----7-7------|
+
+
+[VERSE 1 - 0:08]
+"I saw him dancing there by the record machine..."
+
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-7-7---7-5-------|-----------------|-7-7---7-5-------|
+E|-0-0-0-0-0-0-0-0-|-----------7-5-3-|-0-0-0-0-0-0-0-0-|-----------7-5-3-|
+
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-----------------|-7-7-7-7-7-7-7-7-|-----------------|
+E|-5-5-5-5-5-5-5-5-|-7-7-7-7-7-7-7-7-|-----------------|-7-7-7-7-7-7-7-7-|
+
+
+[CHORUS - 0:34]
+"I love rock and roll, so put another dime..."
+
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----7-7-----7-7-|-----------------|-----7-7-----7-7-|-----------------|
+E|-0-0-----0-0-----|-5-5----7-7------|-0-0-----0-0-----|-5-5----7-0------|
+
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----7-7-----7-7-|-----------------|-7-7-7-7-7-7-7-7-|-----------------|
+E|-0-0-----0-0-----|-5-5----7-7------|-----------------|-7-7-7-7-7-7-7-7-|
+
+
+[GUITAR SOLO - 1:16]
+Follow the verse rhythm backing the solo.
+
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-----------------|-7-7---7-5-------|-----------------|-7-7---7-5-------|
+E|-0-0-0-0-0-0-0-0-|-----------7-5-3-|-0-0-0-0-0-0-0-0-|-----------7-5-3-|`
+            },
+            {
+                id: "indigo",
+                title: "Indigo",
+                artist: "Sam Barber & Avery Anna",
+                tuning: "Standard (E A D G)",
+                key: "E Minor",
+                tempo: 124,
+                difficulty: "Easy",
+                accentColor: "indigo",
+                overview: "Deep country folk rhythm using simple roots (C, D, Em). Lean into the slow momentum to maintain the atmospheric depth.",
+                fretboardGuide: "G|---------------------------------------------------------\nD|---------------------------------------------------------\nA|-(3) [C Root] ---------(5) [D Root] ---------(7) [E Root]-\nE|---------------------------------------------------------\n     Standard Chord progression roots for the entire song",
+                tab: `[INTRO - 0:00]
+Slow, ambient fingerpicking acoustic guitar.
+
+   C                 D                 Em                Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3~~~~~~~~~~~~~~~|-5~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|
+E|-----------------|-----------------|-----------------|-----------------|
+
+
+[VERSE 1 - 0:15]
+"I know you're worried at night, I won't find my way..."
+(Deep whole-note support)
+
+   C                 D                 Em                Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3~~~~~~~~~~~~~~~|-5~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|
+E|-----------------|-----------------|-----------------|-----------------|
+
+   C                 D                 Em                Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3~~~~~~~~~~~~~~~|-5~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|
+E|-----------------|-----------------|-----------------|-----------------|
+
+
+[CHORUS - 1:02]
+"And the light fades away from my face..."
+(Gentle rhythmic pulsation - steady quarters/roots)
+
+   C                 D                 Em                Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3---3---3---3---|-5---5---5---5---|-7---7---7---7---|-7---7---7---7---|
+E|-----------------|-----------------|-----------------|-----------------|
+
+   C                 D                 Em                Em
+G|-----------------|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|-----------------|
+A|-3---3---3---3---|-5---5---5---5---|-7---7---7---7---|-7---7---7---7---|
+E|-----------------|-----------------|-----------------|-----------------|
+
+
+[OUTRO - 2:10]
+Fade out back to empty space and lingering notes.
+
+   C                 D                 Em                
+G|-----------------|-----------------|-----------------|
+D|-----------------|-----------------|-----------------|
+A|-3~~~~~~~~~~~~~~~|-5~~~~~~~~~~~~~~~|-7~~~~~~~~~~~~~~~|
+E|-----------------|-----------------|-----------------|`
+            }
+        ];
+
+        // State variables
+        let selectedSong = null;
+        let isAutoScrolling = false;
+        let scrollSpeed = 1.5; // pixel movement increment per animation loop frame
+        let currentFontSize = 14; // baseline custom font size for JetBrains Mono
+        let scrollIntervalId = null;
+        let audioCtx = null;
+        
+        // Metronome state variables
+        let isMetronomeRunning = false;
+        let metronomeInterval = null;
+        let currentBpm = 120;
+        let currentBeat = 0;
+        let tapTimes = [];
+
+        // UI references
+        const songListContainer = document.getElementById("songList");
+        const welcomeScreen = document.getElementById("welcomeScreen");
+        const tabContentContainer = document.getElementById("tabContentContainer");
+        const currentSongTitle = document.getElementById("currentSongTitle");
+        const currentSongArtist = document.getElementById("currentSongArtist");
+        const specTuning = document.getElementById("specTuning");
+        const specKey = document.getElementById("specKey");
+        const specTempo = document.getElementById("specTempo");
+        const specDifficulty = document.getElementById("specDifficulty");
+        const fingerboardGuide = document.getElementById("fingerboardGuide");
+        const tabText = document.getElementById("tabText");
+        const performanceNotes = document.getElementById("performanceNotes");
+        const fontSizeDisplay = document.getElementById("fontSizeDisplay");
+        const autoScrollText = document.getElementById("autoScrollText");
+        const scrollSpeedDisplay = document.getElementById("scrollSpeedDisplay");
+        const sidebar = document.getElementById("sidebar");
+        const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+
+        // Build Song List in sidebar
+        function initApp() {
+            songListContainer.innerHTML = "";
+            songDatabase.forEach(song => {
+                const button = document.createElement("button");
+                button.className = "song-item w-full flex items-center justify-between p-3.5 rounded-xl border border-transparent hover:bg-slate-800/60 text-left transition-all duration-150 active:scale-[0.98]";
+                button.dataset.id = song.id;
+                button.onclick = () => selectSong(song.id);
+                button.innerHTML = `
+                    <div class="flex items-start space-x-3">
+                        <div class="p-2 bg-slate-950 border border-slate-800 text-indigo-400 rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-all flex items-center justify-center">
+                            <i class="ph ph-music-note-simple text-sm"></i>
+                        </div>
+                        <div class="overflow-hidden">
+                            <p class="text-xs font-black text-slate-200 truncate leading-tight">${song.title}</p>
+                            <p class="text-[10px] text-slate-400 truncate mt-0.5">${song.artist}</p>
+                        </div>
+                    </div>
+                    <i class="ph ph-caret-right text-xs text-slate-600 transition-transform"></i>
+                `;
+                songListContainer.appendChild(button);
+            });
+
+            // LocalStorage Check & Init
+            performanceNotes.addEventListener("input", (e) => {
+                if (selectedSong) {
+                    localStorage.setItem(`notes_${selectedSong.id}`, e.target.value);
+                }
+            });
+
+            // Set default display sizes
+            fontSizeDisplay.textContent = `${currentFontSize}px`;
+            tabText.style.fontSize = `${currentFontSize}px`;
+            scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(1)}x`;
+        }
+
+        // Select song trigger
+        function selectSong(songId) {
+            // Highlight current button
+            document.querySelectorAll(".song-item").forEach(btn => {
+                if (btn.dataset.id === songId) {
+                    btn.classList.add("bg-indigo-600/10", "border-indigo-500/30", "text-white");
+                    btn.classList.remove("hover:bg-slate-800/60");
+                    const icon = btn.querySelector(".ph-caret-right");
+                    if (icon) icon.className = "ph ph-caret-right text-xs text-indigo-400 translate-x-0.5";
+                } else {
+                    btn.classList.remove("bg-indigo-600/10", "border-indigo-500/30", "text-white");
+                    btn.classList.add("hover:bg-slate-800/60");
+                    const icon = btn.querySelector(".ph-caret-right");
+                    if (icon) icon.className = "ph ph-caret-right text-xs text-slate-600";
+                }
+            });
+
+            const song = songDatabase.find(s => s.id === songId);
+            if (!song) return;
+
+            selectedSong = song;
+
+            // Update Details
+            welcomeScreen.classList.add("hidden");
+            tabContentContainer.classList.remove("hidden");
+            
+            currentSongTitle.textContent = song.title;
+            currentSongArtist.textContent = song.artist;
+            specTuning.textContent = song.tuning;
+            specKey.textContent = song.key;
+            specTempo.textContent = `${song.tempo} BPM`;
+            specDifficulty.textContent = song.difficulty;
+            fingerboardGuide.innerHTML = `<pre class="whitespace-pre-wrap no-scrollbar">${song.fretboardGuide}</pre>`;
+            tabText.textContent = song.tab;
+
+            // Load LocalStorage Performance Notes
+            const savedNotes = localStorage.getItem(`notes_${song.id}`) || "";
+            performanceNotes.value = savedNotes;
+
+            // If auto scrolling was active, reset it to give player reading time
+            if (isAutoScrolling) {
+                toggleAutoScroll();
+            }
+
+            // Close responsive drawer sidebar on mobile/iPad portrait after selecting
+            if (window.innerWidth < 768) {
+                sidebar.classList.add("-translate-x-full");
+                sidebar.classList.add("hidden");
+            }
+
+            // Instantly bounce to start of new tab
+            scrollToTop();
+        }
+
+        // Font sizing modifiers
+        document.getElementById("fontSizeUp").onclick = () => {
+            if (currentFontSize < 24) {
+                currentFontSize += 1;
+                tabText.style.fontSize = `${currentFontSize}px`;
+                fontSizeDisplay.textContent = `${currentFontSize}px`;
+            }
+        };
+
+        document.getElementById("fontSizeDown").onclick = () => {
+            if (currentFontSize > 10) {
+                currentFontSize -= 1;
+                tabText.style.fontSize = `${currentFontSize}px`;
+                fontSizeDisplay.textContent = `${currentFontSize}px`;
+            }
+        };
+
+        // Auto Scroll mechanism
+        const autoScrollToggle = document.getElementById("autoScrollToggle");
+        
+        function scrollLoop() {
+            if (!isAutoScrolling) return;
+            const viewport = document.getElementById("tabViewport");
+            viewport.scrollBy(0, scrollSpeed / 2); // Divide for highly smooth slow progression
+            
+            // Check if user hit the bottom of viewport and pause
+            if ((viewport.scrollHeight - viewport.scrollTop - viewport.clientHeight) <= 1) {
+                isAutoScrolling = false;
+                autoScrollToggle.classList.remove("bg-rose-600");
+                autoScrollToggle.classList.add("bg-indigo-600");
+                autoScrollText.textContent = "Auto-Scroll";
+            } else {
+                requestAnimationFrame(scrollLoop);
+            }
+        }
+
+        function toggleAutoScroll() {
+            if (!selectedSong) return;
+            isAutoScrolling = !isAutoScrolling;
+
+            if (isAutoScrolling) {
+                autoScrollToggle.classList.remove("bg-indigo-600");
+                autoScrollToggle.classList.add("bg-rose-600");
+                autoScrollText.textContent = "Pause Scroll";
+                requestAnimationFrame(scrollLoop);
+            } else {
+                autoScrollToggle.classList.remove("bg-rose-600");
+                autoScrollToggle.classList.add("bg-indigo-600");
+                autoScrollText.textContent = "Auto-Scroll";
+            }
+        }
+
+        autoScrollToggle.onclick = toggleAutoScroll;
+
+        document.getElementById("scrollSpeedUp").onclick = () => {
+            if (scrollSpeed < 5) {
+                scrollSpeed += 0.25;
+                scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+            }
+        };
+
+        document.getElementById("scrollSpeedDown").onclick = () => {
+            if (scrollSpeed > 0.25) {
+                scrollSpeed -= 0.25;
+                scrollSpeedDisplay.textContent = `${scrollSpeed.toFixed(2)}x`;
+            }
+        };
+
+        function scrollToTop() {
+            document.getElementById("tabViewport").scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+
+        // Setup Web Audio Context for Metronome and Tuner references
+        function initAudioContext() {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+        }
+
+        // Bass Audio Tuner Player
+        let tunerOscillator = null;
+        let tunerGain = null;
+
+        function playPitch(freq, noteName) {
+            initAudioContext();
+            
+            // Clear prior tuner note sound
+            if (tunerOscillator) {
+                try {
+                    tunerOscillator.stop();
+                } catch(e){}
+                tunerOscillator.disconnect();
+                tunerOscillator = null;
+            }
+
+            const indicator = document.getElementById("tunerIndicator");
+            indicator.textContent = `Sounding ${noteName}...`;
+            
+            const octaveBoost = document.getElementById("octaveToggle").checked;
+            const targetFreq = octaveBoost ? freq * 2 : freq; // Standard small device speakers need pitch * 2
+
+            tunerOscillator = audioCtx.createOscillator();
+            tunerGain = audioCtx.createGain();
+
+            // Bass guitar sounds beautiful using a soft Triangle wave
+            tunerOscillator.type = "triangle";
+            tunerOscillator.frequency.value = targetFreq;
+
+            // Fade in and gradual release
+            tunerGain.gain.setValueAtTime(0, audioCtx.currentTime);
+            tunerGain.gain.linearRampToValueAtTime(0.4, audioCtx.currentTime + 0.05);
+            tunerGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 2.5);
+
+            tunerOscillator.connect(tunerGain);
+            tunerGain.connect(audioCtx.destination);
+
+            tunerOscillator.start();
+            tunerOscillator.stop(audioCtx.currentTime + 2.5);
+        }
+
+        // Precision Metronome Engine
+        const metroBPMInput = document.getElementById("metroBPM");
+        const metroBPMDisplay = document.getElementById("metroBPMDisplay");
+        const metroToggle = document.getElementById("metroToggle");
+        const tapTempoBtn = document.getElementById("tapTempoBtn");
+
+        // Sync local app metronome to current song preset
+        function syncMetronome() {
+            if (selectedSong) {
+                currentBpm = selectedSong.tempo;
+                metroBPMInput.value = currentBpm;
+                metroBPMDisplay.textContent = `${currentBpm} BPM`;
+                if (isMetronomeRunning) {
+                    stopMetronome();
+                    startMetronome();
+                }
+            }
+        }
+
+        metroBPMInput.oninput = (e) => {
+            currentBpm = parseInt(e.target.value);
+            metroBPMDisplay.textContent = `${currentBpm} BPM`;
+            if (isMetronomeRunning) {
+                stopMetronome();
+                startMetronome();
+            }
+        };
+
+        // Tap Tempo detection
+        tapTempoBtn.onclick = () => {
+            const now = performance.now();
+            tapTimes.push(now);
+            if (tapTimes.length > 4) tapTimes.shift();
+
+            if (tapTimes.length >= 2) {
+                let intervalsSum = 0;
+                for (let i = 1; i < tapTimes.length; i++) {
+                    intervalsSum += (tapTimes[i] - tapTimes[i - 1]);
+                }
+                const avgInterval = intervalsSum / (tapTimes.length - 1);
+                currentBpm = Math.round(60000 / avgInterval);
+                if (currentBpm < 40) currentBpm = 40;
+                if (currentBpm > 220) currentBpm = 220;
+
+                metroBPMInput.value = currentBpm;
+                metroBPMDisplay.textContent = `${currentBpm} BPM`;
+                
+                if (isMetronomeRunning) {
+                    stopMetronome();
+                    startMetronome();
+                }
+            }
+        };
+
+        function triggerVisualBeat(beatIndex) {
+            for (let i = 0; i < 4; i++) {
+                const indicator = document.getElementById(`beatIndicator${i}`);
+                if (i === beatIndex) {
+                    indicator.className = `w-2.5 h-2.5 rounded-full ${i === 0 ? 'bg-rose-500 scale-125' : 'bg-indigo-400 scale-110'} transition-all`;
+                } else {
+                    indicator.className = "w-2.5 h-2.5 rounded-full bg-slate-800 transition-colors duration-100";
+                }
+            }
+        }
+
+        function playMetronomeClick() {
+            initAudioContext();
+            const clickOsc = audioCtx.createOscillator();
+            const clickGain = audioCtx.createGain();
+
+            clickOsc.type = "sine";
+            // Accent Beat 1
+            if (currentBeat === 0) {
+                clickOsc.frequency.value = 880; // Crisp high tone
+                clickGain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+            } else {
+                clickOsc.frequency.value = 440; // Mid tone
+                clickGain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            }
+
+            clickGain.gain.exponentialRampToValueAtTime(0.0001, audioCtx.currentTime + 0.08);
+            clickOsc.connect(clickGain);
+            clickGain.connect(audioCtx.destination);
+
+            clickOsc.start();
+            clickOsc.stop(audioCtx.currentTime + 0.1);
+
+            triggerVisualBeat(currentBeat);
+            currentBeat = (currentBeat + 1) % 4;
+        }
+
+        function startMetronome() {
+            isMetronomeRunning = true;
+            currentBeat = 0;
+            metroToggle.classList.remove("bg-rose-600/20", "text-rose-400", "border-rose-500/30");
+            metroToggle.classList.add("bg-rose-600", "text-white");
+            metroToggle.querySelector("span").textContent = "Stop Metronome";
+            
+            const intervalMs = (60 / currentBpm) * 1000;
+            // Play initial click instantly
+            playMetronomeClick();
+            metronomeInterval = setInterval(playMetronomeClick, intervalMs);
+        }
+
+        function stopMetronome() {
+            isMetronomeRunning = false;
+            clearInterval(metronomeInterval);
+            metroToggle.classList.add("bg-rose-600/20", "text-rose-400", "border-rose-500/30");
+            metroToggle.classList.remove("bg-rose-600", "text-white");
+            metroToggle.querySelector("span").textContent = "Start Click";
+            for (let i = 0; i < 4; i++) {
+                document.getElementById(`beatIndicator${i}`).className = "w-2.5 h-2.5 rounded-full bg-slate-800";
+            }
+        }
+
+        metroToggle.onclick = () => {
+            if (isMetronomeRunning) {
+                stopMetronome();
+            } else {
+                startMetronome();
+            }
+        };
+
+        // Responsive Menu Toggle
+        mobileMenuBtn.onclick = () => {
+            if (sidebar.classList.contains("hidden")) {
+                sidebar.classList.remove("hidden", "-translate-x-full");
+            } else {
+                sidebar.classList.add("-translate-x-full", "hidden");
+            }
+        };
+
+        // Responsive adjustment resize triggers
+        window.onresize = () => {
+            if (window.innerWidth >= 768) {
+                sidebar.classList.remove("hidden", "-translate-x-full");
+            } else {
+                sidebar.classList.add("hidden", "-translate-x-full");
+            }
+        };
+
+        // Aesthetic Stage/Light Theme Modifiers
+        const themeToggle = document.getElementById("themeToggle");
+        const themeIcon = document.getElementById("themeIcon");
+        let activeTheme = "stage"; // stage / light
+
+        themeToggle.onclick = () => {
+            if (activeTheme === "stage") {
+                // Change to Light Mode
+                document.documentElement.classList.add("light");
+                document.body.className = "h-full bg-slate-50 text-slate-800 selection:bg-indigo-200 transition-colors duration-200 overflow-hidden";
+                sidebar.className = "w-full md:w-80 bg-white border-b md:border-b-0 md:border-r border-slate-200 flex flex-col h-auto md:h-full transition-all duration-300 z-30";
+                
+                // Adjust colors for UI cards & controls
+                document.querySelectorAll(".song-item").forEach(item => {
+                    item.classList.add("text-slate-700");
+                });
+                
+                themeIcon.className = "ph ph-sun text-lg";
+                activeTheme = "light";
+            } else {
+                // Change to Stage Dark Mode
+                document.documentElement.classList.remove("light");
+                document.body.className = "h-full bg-slate-950 text-slate-100 selection:bg-indigo-500 selection:text-white transition-colors duration-200 overflow-hidden";
+                sidebar.className = "w-full md:w-80 bg-slate-900 border-b md:border-b-0 md:border-r border-slate-800 flex flex-col h-auto md:h-full transition-all duration-300 z-30";
+                
+                themeIcon.className = "ph ph-moon text-lg";
+                activeTheme = "stage";
+            }
+        };
+
+        // Initialize application on load
+        window.onload = () => {
+            initApp();
+        };
+    </script>
+</body>
+</html>
