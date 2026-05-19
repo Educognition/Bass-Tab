@@ -1,0 +1,248 @@
+[
+  {
+    "id": "cant-stop",
+    "title": "Can't Stop",
+    "artist": "Red Hot Chili Peppers",
+    "key": "E Minor",
+    "tempo": 91,
+    "defaultScrollSpeed": 1.5,
+    "parts": {
+      "bass": {
+        "difficulty": "Hard",
+        "guide": "S = Slap\nP = Pop\nx = Muted Note",
+        "tab": "[Intro]\n(Rest for guitar intro, then build up)\nG|----------------|----------------|\nD|----------------|----------------|\nA|7-7-7-7-7-7-7-7-|7-7-7-7-7-7-7-7-|\nE|----------------|----------------|\n\n[Verse 1 - Main Slap Riff]\n  S S P S S P S   S S P S S P S\nG|----7h9-----7---|----7h9-----7---|\nD|----------------|----------------|\nA|7-7-------x---x-|5-5-------x---x-|\nE|----------------|----------------|\n\n  S S P S S P S   S S P S S P S\nG|----7h9-----7---|----7h9---------|\nD|----------------|------------9p7-|\nA|----------------|----------------|\nE|8-8-------x---x-|7-7-------x-----|\n\n[Chorus]\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------------|3-3-3-3-5-5-5-5-|\nE|3-3-3-3-5-5-5-5-|----------------|\n(Play driving 8th notes, emphasize the root)\n\n[Bridge / Guitar Solo]\nG|----------------|----------------|\nD|----------------|----------------|\nA|7--7--7--7--5--5|----------------|\nE|----------------|--8--8--8--8--7-|\n(Keep it steady and driving behind the solo)\n\n[Outro]\n(Repeat Verse Slap Riff, end on E)"
+      },
+      "rhythm": {
+        "difficulty": "Medium",
+        "guide": "Chords: Em7, D, Cmaj7, Bm7\nStrum: 16th note funk strumming",
+        "tab": "[Intro]\n(Wait for Lead Intro, enter with Bass)\nEm7\n\n[Verse]\nEm7  D   Cmaj7   Bm7\n(Play tight, percussive funk stabs on the upbeats. Keep right hand moving in 16th notes.)\n\n[Chorus]\nG     D     Bm    C\n(Open up the strumming, full ringing chords)\n\n[Bridge]\nEm   D   C   B\n(Build up intensity leading into the solo)\n\n[Outro]\n(Funk stabs on Em7)"
+      },
+      "lead": {
+        "difficulty": "Hard",
+        "guide": "Tone: Clean, bridge pickup, slight crunch\nx = muted string strikes",
+        "tab": "[Intro]\ne|----------------|----------------|\nB|----------------|----------------|\nG|7h9-9-9-9-9-9-9-|7h9-9-9-9-9-9-9-|\nD|----------------|----------------|\nA|----------------|----------------|\nE|----------------|----------------|\n\n[Verse - Main Riff]\ne|----------------|----------------|\nB|----8-------8---|----7-------7---|\nG|----9-------9---|----7-------7---|\nD|----------------|----------------|\nA|7-7---x-7-x---x-|5-5---x-5-x---x-|\nE|----------------|----------------|\n\n[Solo]\n(Starts around 12th fret E minor pentatonic. Heavy use of double stops and aggressive bending. Kick on the fuzz/distortion pedal.)\n\n[Outro]\n(Repeat Intro Riff, fade out)"
+      },
+      "drums": {
+        "difficulty": "Medium",
+        "guide": "Groove: Heavy funk rock beat\nEmphasize the 1",
+        "tab": "[Intro]\n(Wait... build up on floor tom and snare)\n\n[Verse]\nHH|x-x-x-x-x-x-x-x-|\nSD|----o-------o---|\nBD|o-------o-o-----|\n(Keep the hi-hat tight and groovy. Ghost notes on the snare are essential here.)\n\n[Chorus]\n(Switch to ride cymbal or open hi-hat for a bigger rock feel)\nRC|x-x-x-x-x-x-x-x-|\nSD|----o-------o---|\nBD|o-------o-o---o-|\n\n[Solo]\n(Heavy crash hits on the 1, drive the beat hard)"
+      },
+      "vocals": {
+        "difficulty": "Hard",
+        "guide": "Style: Rhythmic rap-singing\nHarmony: 3rd up on Choruses",
+        "tab": "[Intro]\n(Instrumental)\n\n[Verse 1]\nCan't stop, addicted to the shindig\nChop Top, he says I'm gonna win big\nChoose not a life of imitation\nDistant cousin to the reservation...\n\n[Chorus]\n(Harmonies enter)\nWait a minute I'm passing out\nWin or lose, just like you\nFar more shocking...\n\n[Bridge]\n(Oohs and Aahs in the background)\n\n[Outro]\nCan't stop, addicted to the shindig..."
+      }
+    }
+  },
+  {
+    "id": "carry-you-home",
+    "title": "Carry You Home",
+    "artist": "Alex Warren & Ella Henderson",
+    "key": "C Major",
+    "tempo": 114,
+    "defaultScrollSpeed": 1.2,
+    "parts": {
+      "bass": {
+        "difficulty": "Easy",
+        "guide": "Roots: C, G, Am, F\nPlay smooth, supportive whole notes, transitioning to 8th notes",
+        "tab": "[Intro / V1]\n(Rest or play very soft whole notes on root)\nG|----------------|----------------|\nD|----------------|----------------|\nA|3---------------|----------------|\nE|----------------|3---------------|\n\n[Pre-Chorus]\nG|----------------|----------------|\nD|----------------|----------------|\nA|0---------------|----------------|\nE|----------------|1---------------|\n\n[Chorus]\n(Switch to driving 8th notes)\nG|----------------|----------------|\nD|----------------|----------------|\nA|3-3-3-3-3-3-3-3-|----------------|\nE|----------------|3-3-3-3-3-3-3-3-|\n\nG|----------------|----------------|\nD|----------------|----------------|\nA|0-0-0-0-0-0-0-0-|----------------|\nE|----------------|1-1-1-1-1-1-1-1-|\n\n[Bridge / Outro]\n(Follow the kick drum, big dynamic swell)"
+      },
+      "rhythm": {
+        "difficulty": "Easy",
+        "guide": "Chords: C, G, Am, F\nCapo: Open or adjust to singer",
+        "tab": "[Verse 1]\nC   G   Am   F\n(Fingerpick or strum very lightly)\n\n[Pre-Chorus]\nAm  G  F\n(Build tension)\n\n[Chorus]\nC   G   Am   F\n(Full driving acoustic strum pattern: D D U U D U)\n\n[Bridge]\nAm  F  C  G\n\n[Outro]\nC (Let ring)"
+      },
+      "lead": {
+        "difficulty": "Medium",
+        "guide": "Focus on melodic swells and atmosphere",
+        "tab": "[Intro/Verse]\n(Play soft atmospheric swells on C and G triad shapes)\n\n[Chorus]\n(Play octaves following the vocal melody or picking through the chords)\ne|----------------|----------------|\nB|5---5---5---5---|8---8---8---8---|\nG|--5---5---5---5-|--7---7---7---7-|\n\n[Solo/Post-Chorus]\n(Simple, emotional melodic line using C Major pentatonic)"
+      },
+      "drums": {
+        "difficulty": "Medium",
+        "guide": "Folk-pop build up. Lots of toms.",
+        "tab": "[Verse]\n(Cross-stick or very light hi-hat, minimal kick)\n\n[Pre-Chorus]\n(Add floor tom build)\nFT|o-o-o-o-o-o-o-o-|\n\n[Chorus]\n(Big 4-on-the-floor kick, heavy crashes)\nCC|X-x-x-x-X-x-x-x-|\nSD|----o-------o---|\nBD|o-o-o-o-o-o-o-o-|\n\n[Outro]\n(Big hits matching the band, ring out)"
+      },
+      "vocals": {
+        "difficulty": "Medium",
+        "guide": "Duet structure. Pay attention to trade-offs.",
+        "tab": "[Verse 1 (Alex)]\n(Soft, emotional delivery)\nI can see the weight you carry...\n\n[Pre-Chorus (Together)]\nHarmony starts here. Ella takes the high 3rd.\n\n[Chorus]\nAnd I will carry you home!\n(Full voice, push the dynamics)\n\n[Verse 2 (Ella)]\n(Takes the lead, Alex drops to harmony)\n\n[Bridge]\n(Trade off lines, big vocal swell at the end)"
+      }
+    }
+  },
+  {
+    "id": "the-chain",
+    "title": "The Chain",
+    "artist": "Fleetwood Mac",
+    "key": "E Minor",
+    "tempo": 152,
+    "defaultScrollSpeed": 1.7,
+    "parts": {
+      "bass": {
+        "difficulty": "Hard",
+        "guide": "Wait for the iconic solo. Use a pick for tone.",
+        "tab": "[Intro/Verses]\n(Rest. Bass does not play in the first half of the song)\n\n[Breakdown / The Solo]\n(This is it. Dig in with the pick. 76 BPM feel here.)\nG|-------------------------|\nD|-------------------------|\nA|-------5h7-7-7-7---------|\nE|-5-7-8-----------5-7-8-0-|\n\n[Outro Fast Section]\n(Tempo jumps to 152 BPM)\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------------|----------------|\nE|0-0-0-0-0-0-0-0-|5-5-5-5-5-5-5-5-|\n(Follow the A to E progression, driving 8th notes relentlessly until the end)"
+      },
+      "rhythm": {
+        "difficulty": "Medium",
+        "guide": "Acoustic in alternate tuning (Drop D or DADGBE often used, standard works)",
+        "tab": "[Intro]\n(Fingerpicking Em)\n\n[Verse]\nEm   A   C   Em\nListen to the wind blow, watch the sun rise...\n\n[Chorus]\nAm   C   Em\nAnd if you don't love me now...\n\n[Breakdown]\n(Silence / let bass take over)\n\n[Outro]\nEm   A\n(Aggressive strumming to match the drum build)"
+      },
+      "lead": {
+        "difficulty": "Hard",
+        "guide": "Slide guitar / Resonator for intro. Screaming electric for outro.",
+        "tab": "[Intro]\n(Dobro/Slide licks in E minor)\n\n[Chorus]\n(Electric guitar swells/fills)\n\n[Breakdown]\n(Feedback and volume swells)\n\n[Outro Solo]\n(Massive E minor pentatonic solo. Lots of aggressive unison bends and fast triplets over the E and A chords.)\ne|12b14--12b14-12-10-12-10----|\nB|-------------------------12-|"
+      },
+      "drums": {
+        "difficulty": "Medium",
+        "guide": "Tom-heavy tribal beat",
+        "tab": "[Intro/Verse]\n(Kick on 1 and 3. Light hi-hat.)\n\n[Chorus]\n(Open hi hat, heavier snare)\n\n[Breakdown]\n(The iconic kick drum pulse)\nBD|o---o---o---o---|\n\n[Outro]\n(Double time rock beat)\nCC|X---------------|\nHH|--x-x-x-x-x-x-x-|\nSD|----o-------o---|\nBD|o-o---o-o-o---o-|\n(Lots of fast tom fills)"
+      },
+      "vocals": {
+        "difficulty": "Hard",
+        "guide": "3-Part Harmony is critical. Buckingham (Low), Nicks (Mid), McVie (High).",
+        "tab": "[Verse 1]\nListen to the wind blow...\n(Unison/Octaves)\n\n[Chorus]\nAnd if you don't love me now\nYou will never love me again\n(Full 3-part harmony. Stay perfectly locked in pitch.)\n\n[Outro]\nChain, keep us together...\n(Repeating chant, building in volume)"
+      }
+    }
+  },
+  {
+    "id": "sunday-morning",
+    "title": "Sunday Morning",
+    "artist": "Maroon 5",
+    "key": "C Major",
+    "tempo": 88,
+    "defaultScrollSpeed": 1.4,
+    "parts": {
+      "bass": {
+        "difficulty": "Medium",
+        "guide": "Jazzy, bouncy feel. Lots of syncopation.",
+        "tab": "[Intro/Verse]\n(Chord progression: Dm9 - G13 - Cmaj9)\nG|----------------|----------------|\nD|----------------|----------------|\nA|5---5-5-------x-|----------2-3-4-|\nE|----------3-3---|--x-8---8-------|\n\n[Chorus]\n(Same progression, play slightly heavier)\nG|----------------|----------------|\nD|--------3-5-3---|----------------|\nA|5---5-5-------5-|----------2-3-4-|\nE|----------------|3---3-x-8-------|\n\n[Bridge]\n(Walk downs and variations on the Cmaj9)\n\n[Outro]\n(Groove out on the main riff, add fills in C major pentatonic)"
+      },
+      "rhythm": {
+        "difficulty": "Hard",
+        "guide": "Jazz voicings: Dm9, G13, Cmaj9",
+        "tab": "[Intro/Verse/Chorus]\nDm9:  x-5-3-5-5-x\nG13:  3-x-3-4-5-x\nCmaj9: x-3-2-4-3-x\n\n(Strum pattern is highly syncopated. Chucking/muting on the 16th notes is required to get the groove right.)"
+      },
+      "lead": {
+        "difficulty": "Medium",
+        "guide": "Clean tone, jazzy licks.",
+        "tab": "[Intro]\n(Piano does the main melody, play light chords or rest)\n\n[Chorus]\n(Octave slides mirroring the vocal melody)\n\n[Solo]\n(Play smooth jazz lines over the Dm9-G13-Cmaj9 progression. Use C Major scale, lean heavily on chord tones.)\ne|----------------8-10-8---|\nB|----------8-10---------10|"
+      },
+      "drums": {
+        "difficulty": "Medium",
+        "guide": "Shuffle/Funk feel. Keep the hi-hat tight.",
+        "tab": "[Verse/Chorus]\nHH|x-x-x-x-x-x-x-x-|\nSD|----o-------o---|\nBD|o-------o-o-----|\n(Add ghost notes on the snare between hi-hat hits to create the shuffle/bounce feel.)\n\n[Bridge]\n(Move to ride cymbal bell, open up the groove)"
+      },
+      "vocals": {
+        "difficulty": "Hard",
+        "guide": "Requires strong falsetto and agile runs.",
+        "tab": "[Verse 1]\nSunday morning rain is falling\nSteal some covers share some skin\n\n[Chorus]\nThat may be all I need\nIn darkness she is all I see\nCome and rest your bones with me\n\n[Bridge]\n(Big vocal runs and ad-libs. Switch smoothly between chest voice and falsetto.)"
+      }
+    }
+  },
+  {
+    "id": "yellow",
+    "title": "Yellow",
+    "artist": "Coldplay",
+    "key": "B Major",
+    "tempo": 86,
+    "defaultScrollSpeed": 1.3,
+    "parts": {
+      "bass": {
+        "difficulty": "Easy",
+        "guide": "Driving 8th notes. Emphasize the changes.",
+        "tab": "[Intro]\nG|----------------|----------------|\nD|----------------|----------------|\nA|2-2-2-2-2-2-2-2-|2-2-2-2-2-2-2-2-|\nE|----------------|----------------|\n\n[Verse]\nG|----------------|----------------|\nD|----------------|----------------|\nA|2-2-2-2-2-2-2-2-|----------------|\nE|----------------|2-2-2-2-2-2-2-2-|\n(B -> F#m)\n\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------------|2-2-2-2-2-2-2-2-|\nE|0-0-0-0-0-0-0-0-|----------------|\n(E -> B)\n\n[Chorus]\n(E -> G#m -> F#)\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------------|----------------|\nE|0-0-0-0-0-0-0-0-|4-4-4-4-2-2-2-2-|\n\n[Outro]\n(Slow down, end on B)"
+      },
+      "rhythm": {
+        "difficulty": "Easy",
+        "guide": "Acoustic strumming. Tuning EABGBD# (Optional, standard works with B, F#m, E)",
+        "tab": "[Intro/Verse]\nB    F#m    E    B\n(Big, sweeping down-strums)\n\n[Chorus]\nE    G#m  F#\nLook at the stars, look how they shine for you...\n\n[Outro]\nB   F#m   E\n(Fade out on B)"
+      },
+      "lead": {
+        "difficulty": "Medium",
+        "guide": "Heavy overdrive / distortion for the intro hook.",
+        "tab": "[Intro Hook]\ne|-------------------------|\nB|0-0-0-0-0-0-0-0-0-0-0-0-0|\nG|8-8-8-9-9-9-1111119-9-9-8|\n(Pick tremolo style rapidly)\n\n[Verse]\n(Clean tone, play ringing arpeggios of the B, F#m, and E chords)\n\n[Chorus]\n(Swell on the E, G#m, F# chords with overdrive)"
+      },
+      "drums": {
+        "difficulty": "Easy",
+        "guide": "Heavy, slow rock groove. Don't rush.",
+        "tab": "[Intro]\nCC|X---------------|X---------------|\nHH|--x-x-x-x-x-x-x-|--x-x-x-x-x-x-x-|\nSD|----o-------o---|----o-------o---|\nBD|o-------o-o-----|o-------o-o-----|\n(Hit the crashes hard and let them wash)\n\n[Verse]\n(Close the hi-hat, bring the volume down significantly)\n\n[Chorus]\n(Open the hi-hat back up)"
+      },
+      "vocals": {
+        "difficulty": "Medium",
+        "guide": "Lots of falsetto in the chorus. Very breathy tone.",
+        "tab": "[Verse 1]\nLook at the stars\nLook how they shine for you\nAnd everything you do...\n\n[Chorus]\nYour skin, oh yeah your skin and bones\nTurn into something beautiful\n(Hit the falsetto gracefully on 'beautiful')\n\n[Outro]\nLook at the stars...\n(Very soft, fading out)"
+      }
+    }
+  },
+  {
+    "id": "i-love-rock-and-roll",
+    "title": "I Love Rock and Roll",
+    "artist": "Joan Jett",
+    "key": "E Major",
+    "tempo": 94,
+    "defaultScrollSpeed": 1.4,
+    "parts": {
+      "bass": {
+        "difficulty": "Easy",
+        "guide": "Lock in with the kick drum. Heavy E, A, B notes.",
+        "tab": "[Intro/Chorus Riff]\nG|----------------|----------------|\nD|----------------|----------------|\nA|--------7-7-7---|--------9-9-9---|\nE|0-0-0-----------|5-5-5---------7-|\n(E -> E -> A -> B)\n\n[Verse]\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------------|----------------|\nE|0-0-0-0-0-0-0-0-|0-0-0-0-0-0-0-0-|\n(Pedal on the low E string to create the driving rock feel)\n\n[Pre-Chorus]\nG|----------------|----------------|\nD|----------------|----------------|\nA|--------2-2-2-2-|2-2-2-2-2-2-2-2-|\nE|5-5-5-5---------|----------------|\n(A -> B, building up to the Chorus)\n\n[Solo]\n(Play Chorus Riff)"
+      },
+      "rhythm": {
+        "difficulty": "Easy",
+        "guide": "Chunky power chords. Mute tightly.",
+        "tab": "[Intro/Chorus]\nE5   E5   A5   B5\n(Strum hard, leave space for the drum beat: 'Strum-Strum-Mute... Clap!')\n\n[Verse]\nE5 (palm muted 8th notes)\n\n[Pre-Chorus]\nA5     B5\n(Let ring, build up)"
+      },
+      "lead": {
+        "difficulty": "Medium",
+        "guide": "Classic rock pentatonic solo.",
+        "tab": "[Verse Licks]\n(Add small bends on the G string, 2nd fret (A note) bending up to B)\n\n[Solo]\n(Starts on 12th position E minor pentatonic. Lots of chuck berry style double stops.)\ne|12-12-12-12------|----------------|\nB|12-12-12-12-15b17|15-12-----------|\nG|-----------------|------14-12-----|\n\n[Outro]\n(Big E5 chord, let it ring and feedback)"
+      },
+      "drums": {
+        "difficulty": "Easy",
+        "guide": "The ultimate stadium stomp-clap beat.",
+        "tab": "[Intro/Chorus]\nCC|X---------------|----------------|\nHH|----x---x---x---|x---x---x---x---|\nSD|----o-------o---|----o-------o---|\nBD|o-o-----o-o-----|o-o-----o-o-----|\n(The kick-kick-snare pattern is iconic. Do not deviate.)\n\n[Verse]\n(Keep it exact, heavy and steady.)\n\n[Outro]\n(Lots of cymbal crashes, end on the 1)"
+      },
+      "vocals": {
+        "difficulty": "Medium",
+        "guide": "Gritty, powerful rock vocal.",
+        "tab": "[Verse 1]\nI saw him dancing there by the record machine\nI knew he musta been about seventeen\n\n[Pre-Chorus]\nThe beat was going strong\nPlaying my favorite song...\n\n[Chorus]\nI love rock and roll\nSo put another dime in the jukebox, baby\n\n[Outro]\n(A capella chorus with clapping, then band kicks back in)"
+      }
+    }
+  },
+  {
+    "id": "indigo",
+    "title": "Indigo",
+    "artist": "Sam Barber & Avery Anna",
+    "key": "G Major",
+    "tempo": 120,
+    "defaultScrollSpeed": 1.3,
+    "parts": {
+      "bass": {
+        "difficulty": "Easy",
+        "guide": "Country roots. Standard G, C, D, Em.",
+        "tab": "[Intro/Verse]\nG|----------------|----------------|\nD|----------------|----------------|\nA|----------3---3-|5---5-----------|\nE|3---3-----------|----------0---0-|\n(Play root on the 1, 5th on the 3. Classic country bass pattern.)\n\n[Chorus]\nG|----------------|----------------|\nD|----------------|----------------|\nA|3-3-3-3---------|5-5-5-5---------|\nE|--------3-3-3-3-|--------0-0-0-0-|\n(Switch to supportive 8th notes to lift the chorus)\n\n[Bridge]\n(Follow the acoustic guitar, long sustained notes)\n\n[Outro]\n(End softly on G)"
+      },
+      "rhythm": {
+        "difficulty": "Easy",
+        "guide": "Capo 3rd fret (to play in Bb using G shapes)",
+        "tab": "[Intro]\nG   Cadd9   D   Em7\n\n[Verse]\nG   Cadd9   D   Em7\n(Standard country fingerpicking or light flatpicking. Boom-chick pattern.)\n\n[Chorus]\nCadd9   G   D   Em7\n(Full strumming: D D U U D U)\n\n[Outro]\nG (Slow down and end on single downstrum)"
+      },
+      "lead": {
+        "difficulty": "Medium",
+        "guide": "Acoustic or clean electric with slight delay/reverb.",
+        "tab": "[Intro Fills]\n(Play soft, sliding double stops in the G major scale.)\ne|------3/5-3-----|\nB|------3/5-3-----|\n\n[Verse/Chorus]\n(Play supportive triad inversions up the neck, don't step on the vocals.)\n\n[Solo]\n(Melodic, acoustic-style solo focusing on chord tones. Slide up to the major 3rds.)"
+      },
+      "drums": {
+        "difficulty": "Easy",
+        "guide": "Brush or hot-rod stick country ballad feel.",
+        "tab": "[Verse]\n(Cross-stick on snare, light kick drum)\nSD|----x-------x---|\nBD|o-------o-------|\n\n[Chorus]\n(Switch to standard snare hit, but keep it relaxed. Ride cymbal for width.)\nRC|x-x-x-x-x-x-x-x-|\nSD|----o-------o---|\nBD|o-o-----o-o-----|\n\n[Outro]\n(Very light cymbal rolls, fade out)"
+      },
+      "vocals": {
+        "difficulty": "Hard",
+        "guide": "Emotional country duet. Watch the harmony blends.",
+        "tab": "[Verse 1 (Sam)]\n(Raw, acoustic country tone)\n\n[Chorus (Together)]\n(Avery comes in on the high harmony. Blend your voices so neither overpowers the other.)\n\n[Verse 2 (Avery)]\n(Takes the lead, Sam provides lower harmony or rests)\n\n[Bridge]\n(Trading lines, building to the final big chorus)\n\n[Outro]\n(Harmonize the final line, let it ring out)"
+      }
+    }
+  }
+]
+```
